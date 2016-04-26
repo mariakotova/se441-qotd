@@ -24,6 +24,7 @@ apply plugin:"war"
 apply plugin:"org.grails.grails-web"
 apply plugin:"org.grails.grails-gsp"
 apply plugin:"asset-pipeline"
+apply plugin:"maven"
 
 ext {
     grailsVersion = project.grailsVersion
@@ -68,6 +69,22 @@ task wrapper(type: Wrapper) {
     gradleVersion = gradleWrapperVersion
 }
 
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(
+            url: "${nexusUrl}/content/repositories/releases") {
+                authentication(userName: nexusUsername,
+                    password: nexusPassword)
+            }
+            snapshotRepository(
+                url: "${nexusUrl}/content/repositories/snapshots") {
+                    authentication(userName: nexusUsername,
+                                    password: nexusPassword)
+            }
+        }
+    }
+}
 assets {
     minifyJs = true
     minifyCss = true
